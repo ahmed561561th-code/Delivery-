@@ -30,7 +30,28 @@
       });
     });
   </script>
+<!-- زر تفعيل الإشعارات -->
+<button id="subscribe-btn" onclick="requestNotificationPermission()" style="padding: 12px 20px; background-color: #ff9800; color: #ffffff; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;">
+  تفعيل إشعارات الطلبات 🔔
+</button>
 
+<script>
+  async function requestNotificationPermission() {
+    if (typeof OneSignalDeferred !== "undefined") {
+      OneSignalDeferred.push(async function(OneSignal) {
+        try {
+          // إظهار نافذة طلب الصلاحية عند الضغط على الزر
+          await OneSignal.Notifications.requestPermission();
+        } catch (error) {
+          console.error("خطأ أثناء طلب الإشعارات:", error);
+        }
+      });
+    } else {
+      alert("جاري تحميل نظام الإشعارات، أعد المحاولة بعد ثوانٍ.");
+    }
+  }
+</script>
+  
   <style>
     body, input, select, button, h1, h2, h3, h4, p, span, div {
       font-family: 'Tajawal', sans-serif;
