@@ -22,36 +22,21 @@
     window.OneSignalDeferred = window.OneSignalDeferred || [];
     OneSignalDeferred.push(async function(OneSignal) {
       await OneSignal.init({
-        appId: "c4e3f190-e5b2-4f2b-9f6d-0b383ebccab8", // ضع هنا App ID الخاص بك من OneSignal
-        safari_web_id: "web.onesignal.auto.xxxxx",
-        notifyButton: {
-          enable: true,
-        },
+        appId: "c4e3f190-e5b2-4f2b-9f6d-0b383ebccab8",
+        allowLocalhostAsSecureOrigin: true,
       });
+
+      // طلب صلاحية الإشعارات تلقائياً على الهاتف فور الفتح
+      if (OneSignal.Notifications && !OneSignal.Notifications.permission) {
+        try {
+          await OneSignal.Notifications.requestPermission();
+        } catch(e) {
+          console.log("OneSignal Permission Request Error:", e);
+        }
+      }
     });
   </script>
-<!-- زر تفعيل الإشعارات -->
-<button id="subscribe-btn" onclick="requestNotificationPermission()" style="padding: 12px 20px; background-color: #ff9800; color: #ffffff; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;">
-  تفعيل إشعارات الطلبات 🔔
-</button>
 
-<script>
-  async function requestNotificationPermission() {
-    if (typeof OneSignalDeferred !== "undefined") {
-      OneSignalDeferred.push(async function(OneSignal) {
-        try {
-          // إظهار نافذة طلب الصلاحية عند الضغط على الزر
-          await OneSignal.Notifications.requestPermission();
-        } catch (error) {
-          console.error("خطأ أثناء طلب الإشعارات:", error);
-        }
-      });
-    } else {
-      alert("جاري تحميل نظام الإشعارات، أعد المحاولة بعد ثوانٍ.");
-    }
-  }
-</script>
-  
   <style>
     body, input, select, button, h1, h2, h3, h4, p, span, div {
       font-family: 'Tajawal', sans-serif;
@@ -93,6 +78,12 @@
   </header>
 
   <main class="p-4 space-y-4">
+
+    <!-- زر تفعيل الإشعارات للهواتف -->
+    <button id="subscribe-btn" onclick="requestNotificationPermission()" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-stone-950 font-black py-3 px-4 rounded-2xl text-xs shadow-lg flex items-center justify-center gap-2 transition active:scale-95">
+      <i class="fa-solid fa-bell-concierge text-base"></i>
+      <span>تفعيل إشعارات الطلبات للهاتف 🔔</span>
+    </button>
 
     <!-- كارت إدخال الاسم إذا لم يكن محفوظاً -->
     <div id="driver-setup-card" class="glass-card p-4 rounded-2xl border border-stone-800 space-y-3 shadow-xl">
@@ -161,6 +152,22 @@
     let driverAudioAllowed = true;
     let wakeLock = null;
 
+    // دالة طلب صلاحية الإشعارات اليدوية من الزر
+    async function requestNotificationPermission() {
+      if (window.OneSignalDeferred) {
+        OneSignalDeferred.push(async function(OneSignal) {
+          try {
+            await OneSignal.Notifications.requestPermission();
+            alert("إذا ظهرت لك نافذة تطلب الإذن، اضغط على 'سماح' (Allow) لتصلك الإشعارات.");
+          } catch (error) {
+            console.error("خطأ أثناء طلب الإشعارات:", error);
+          }
+        });
+      } else if ("Notification" in window) {
+        Notification.requestPermission();
+      }
+    }
+
     // --- 1. تفعيل Screen Wake Lock لمنع إغلاق الشاشة والخلفية ---
     async function requestWakeLock() {
       try {
@@ -180,27 +187,7 @@
       }
     });
 
-    // --- 2. تسجيل Service Worker تلقائياً للإشعارات ---
-    if ('serviceWorker' in navigator) {
-      const swCode = `
-        self.addEventListener('install', (e) => self.skipWaiting());
-        self.addEventListener('activate', (e) => self.clients.claim());
-        self.addEventListener('notificationclick', (e) => {
-          e.notification.close();
-          e.waitUntil(clients.matchAll({ type: 'window' }).then(clientList => {
-            for (const client of clientList) {
-              if (client.url && 'focus' in client) return client.focus();
-            }
-            if (clients.openWindow) return clients.openWindow('/');
-          }));
-        });
-      `;
-      const blob = new Blob([swCode], { type: 'application/javascript' });
-      const swUrl = URL.createObjectURL(blob);
-      navigator.serviceWorker.register(swUrl).catch(err => console.log('SW registration error:', err));
-    }
-
-    // --- 3. تهيئة الصوت والإشعارات عند التفاعل ---
+    // --- 2. تهيئة الصوت والإشعارات عند التفاعل ---
     document.addEventListener('click', function unlockAudioAndNotifications() {
       if ("Notification" in window && Notification.permission === "default") {
         Notification.requestPermission();
@@ -229,7 +216,9 @@
     function registerOneSignalDriverTag(driverName) {
       if (window.OneSignalDeferred) {
         OneSignalDeferred.push(function(OneSignal) {
-          OneSignal.User.addTag("driver_name", driverName.trim().toLowerCase());
+          if (OneSignal.User && OneSignal.User.addTag) {
+            OneSignal.User.addTag("driver_name", driverName.trim().toLowerCase());
+          }
         });
       }
     }
