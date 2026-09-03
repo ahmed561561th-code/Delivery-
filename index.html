@@ -22,9 +22,10 @@
     window.OneSignalDeferred = window.OneSignalDeferred || [];
     OneSignalDeferred.push(async function(OneSignal) {
       await OneSignal.init({
-        appId: "c4e3f190-e5b2-4f2b-9f6d-0b383ebccab8",
+        appId: "YOUR_ONESIGNAL_APP_ID", // ضع هنا App ID الخاص بك من OneSignal
+        safari_web_id: "web.onesignal.auto.xxxxx",
         notifyButton: {
-          enable: false,
+          enable: true,
         },
       });
     });
@@ -139,6 +140,7 @@
     let driverAudioAllowed = true;
     let wakeLock = null;
 
+    // --- 1. تفعيل Screen Wake Lock لمنع إغلاق الشاشة والخلفية ---
     async function requestWakeLock() {
       try {
         if ('wakeLock' in navigator) {
@@ -150,12 +152,14 @@
       }
     }
 
+    // إعادة تفعيل Wake Lock عند العودة للتطبيق
     document.addEventListener('visibilitychange', async () => {
       if (wakeLock !== null && document.visibilityState === 'visible') {
         await requestWakeLock();
       }
     });
 
+    // --- 2. تسجيل Service Worker تلقائياً للإشعارات ---
     if ('serviceWorker' in navigator) {
       const swCode = `
         self.addEventListener('install', (e) => self.skipWaiting());
@@ -175,6 +179,7 @@
       navigator.serviceWorker.register(swUrl).catch(err => console.log('SW registration error:', err));
     }
 
+    // --- 3. تهيئة الصوت والإشعارات عند التفاعل ---
     document.addEventListener('click', function unlockAudioAndNotifications() {
       if ("Notification" in window && Notification.permission === "default") {
         Notification.requestPermission();
@@ -225,12 +230,6 @@
       }
     }
 
-function saveDriverToken(token) {
-    console.log("FCM Token Received:", token);
-    // حفظ التوكن في الـ LocalStorage أو إرساله للسيرفر
-    localStorage.setItem("driver_fcm_token", token);
-}
-    
     function sendDriverSystemNotification(title, body) {
       if ("Notification" in window && Notification.permission === "granted") {
         const options = {
@@ -319,6 +318,11 @@ function saveDriverToken(token) {
               "أوردر توصيل جديد 🛵", 
               `لديك أوردر جديد برقم #${unacceptedOrder[1].orderId || unacceptedOrder[0].slice(-5)} في انتظار القبول`
             );
+          }
+
+          // إرسال تنبيه مباشر لمكون WebViewer في تطبيق كودلار لتشغيل الصوت والنظام المباشر
+          if (window.AppInventor) {
+            window.AppInventor.setWebViewString("NEW_ORDER_" + Date.now());
           }
         } else {
           if (alertAudio) { alertAudio.pause(); alertAudio.currentTime = 0; }
@@ -435,6 +439,9 @@ function saveDriverToken(token) {
         driverAccepted: true,
         status: 'في الطريق'
       });
+      if (window.AppInventor) {
+        window.AppInventor.setWebViewString("ORDER_ACCEPTED");
+      }
     }
 
     function markDelivered(key) {
@@ -443,6 +450,9 @@ function saveDriverToken(token) {
           status: 'تم التسليم',
           driverAccepted: true
         });
+        if (window.AppInventor) {
+          window.AppInventor.setWebViewString("ORDER_DELIVERED");
+        }
       }
     }
   </script>
