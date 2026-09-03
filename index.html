@@ -225,6 +225,12 @@
       }
     }
 
+function saveDriverToken(token) {
+    console.log("FCM Token Received:", token);
+    // حفظ التوكن في الـ LocalStorage أو إرساله للسيرفر
+    localStorage.setItem("driver_fcm_token", token);
+}
+    
     function sendDriverSystemNotification(title, body) {
       if ("Notification" in window && Notification.permission === "granted") {
         const options = {
