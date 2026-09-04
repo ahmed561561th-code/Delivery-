@@ -73,7 +73,7 @@
 
   <main class="p-4 space-y-4">
 
-    <!-- كارت إدخال الاسم إذا لم يكن محفوظاً -->
+    <!-- كارت إدخال الاسم -->
     <div id="driver-setup-card" class="glass-card p-4 rounded-2xl border border-stone-800 space-y-3 shadow-xl">
       <div class="flex items-center gap-2 text-xs font-bold text-amber-400">
         <i class="fa-solid fa-user-gear"></i>
@@ -87,7 +87,7 @@
       </div>
     </div>
 
-    <!-- شريط الإحصائيات اليومية الفردية للطيار -->
+    <!-- شريط الإحصائيات اليومية -->
     <div class="grid grid-cols-2 gap-3">
       <div class="bg-stone-900/90 border border-stone-800/80 p-3 rounded-2xl flex items-center gap-3 shadow">
         <div class="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center text-sm font-black">
@@ -140,7 +140,7 @@
     let driverAudioAllowed = true;
     let wakeLock = null;
 
-    // --- 1. تفعيل Screen Wake Lock لمنع إغلاق الشاشة والخلفية ---
+    // 1. تفعيل Wake Lock
     async function requestWakeLock() {
       try {
         if ('wakeLock' in navigator) {
@@ -158,7 +158,7 @@
       }
     });
 
-    // --- 2. تسجيل Service Worker تلقائياً للإشعارات ---
+    // 2. تسجيل Service Worker
     if ('serviceWorker' in navigator) {
       const swCode = `
         self.addEventListener('install', (e) => self.skipWaiting());
@@ -178,7 +178,7 @@
       navigator.serviceWorker.register(swUrl).catch(err => console.log('SW registration error:', err));
     }
 
-    // --- 3. تهيئة الصوت والإشعارات عند التفاعل ---
+    // 3. تهيئة الصوت عند أول تفاعل
     document.addEventListener('click', function unlockAudioAndNotifications() {
       if ("Notification" in window && Notification.permission === "default") {
         Notification.requestPermission();
@@ -204,18 +204,11 @@
       initDriverOrdersListener();
     });
 
-    // إرسال الـ Tag لكل من متصفح الويب ومكون كودلار أندرويد
     function registerOneSignalDriverTag(driverName) {
-      const cleanName = driverName.trim().toLowerCase();
-      
       if (window.OneSignalDeferred) {
         OneSignalDeferred.push(function(OneSignal) {
-          OneSignal.User.addTag("driver_name", cleanName);
+          OneSignal.User.addTag("driver_name", driverName.trim().toLowerCase());
         });
-      }
-
-      if (window.AppInventor) {
-        window.AppInventor.setWebViewString("SET_DRIVER_TAG:" + cleanName);
       }
     }
 
@@ -257,6 +250,7 @@
       }
     }
 
+    // --- حفظ اسم الطيار وتمريره لـ Kodular و OneSignal ---
     function saveDriverName() {
       const val = document.getElementById('driver-name-input').value.trim();
       if (!val) {
@@ -267,6 +261,12 @@
       localStorage.setItem('rokn_driver_name', currentDriverName);
       document.getElementById('header-driver-display').innerText = "الكابتن: " + currentDriverName;
       registerOneSignalDriverTag(currentDriverName);
+
+      // إرسال الإشارة لكودلار لحفظ البيانات وتفعيل التنبيه
+      if (window.AppInventor) {
+        window.AppInventor.setWebViewString("SET_DRIVER_TAG:" + currentDriverName);
+      }
+
       alert("تم اعتماد اسم الكابتن: " + currentDriverName);
       initDriverOrdersListener();
     }
