@@ -22,7 +22,7 @@
     window.OneSignalDeferred = window.OneSignalDeferred || [];
     OneSignalDeferred.push(async function(OneSignal) {
       await OneSignal.init({
-        appId: "c4e3f190-e5b2-4f2b-9f6d-0b383ebccab8", // ضع هنا App ID الخاص بك من OneSignal
+        appId: "c4e3f190-e5b2-4f2b-9f6d-0b383ebccab8",
         safari_web_id: "web.onesignal.auto.xxxxx",
         notifyButton: {
           enable: true,
@@ -152,7 +152,6 @@
       }
     }
 
-    // إعادة تفعيل Wake Lock عند العودة للتطبيق
     document.addEventListener('visibilitychange', async () => {
       if (wakeLock !== null && document.visibilityState === 'visible') {
         await requestWakeLock();
@@ -205,11 +204,18 @@
       initDriverOrdersListener();
     });
 
+    // إرسال الـ Tag لكل من متصفح الويب ومكون كودلار أندرويد
     function registerOneSignalDriverTag(driverName) {
+      const cleanName = driverName.trim().toLowerCase();
+      
       if (window.OneSignalDeferred) {
         OneSignalDeferred.push(function(OneSignal) {
-          OneSignal.User.addTag("driver_name", driverName.trim().toLowerCase());
+          OneSignal.User.addTag("driver_name", cleanName);
         });
+      }
+
+      if (window.AppInventor) {
+        window.AppInventor.setWebViewString("SET_DRIVER_TAG:" + cleanName);
       }
     }
 
@@ -320,7 +326,6 @@
             );
           }
 
-          // إرسال تنبيه مباشر لمكون WebViewer في تطبيق كودلار لتشغيل الصوت والنظام المباشر
           if (window.AppInventor) {
             window.AppInventor.setWebViewString("NEW_ORDER_" + Date.now());
           }
