@@ -4,16 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#09090b">
-  
-  <!-- إعدادات PWA للشاشة الرئيسية -->
-  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="طيار الركن الشامي">
+  <meta name="mobile-web-app-capable" content="yes">
   <title>تطبيق الطيارين - الركن الشامي</title>
 
-  <!-- Web App Manifest مدمج تلقائياً -->
-  <link rel="manifest" href='data:application/manifest+json,{"name":"تطبيق الطيار - الركن الشامي","short_name":"الطيار","start_url":"/","display":"standalone","background_color":"#09090b","theme_color":"#09090b","icons":[{"src":"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgYDIEqcDEQOb7vPbahxCYf7xbY8dt4Mg8RM3JZM7gWnEnghUm7HR6JPOy2wJSkl_pxcAsnPCbuqtDiPCxg-Kx9N0J5n3yckarG-1BtFKjT4O65lGwZ3a2wjQIUssdT9XpCrc0DNpYF3hpp2snQDdfFOUBK3olE7M7QNNAy8DHcXMKj3t8D6veY9Mj576oA/s320/WhatsApp%20Image%202025-06-11%20at%204.34.21%20PM.jpeg","sizes":"192x192","type":"image/jpeg"}]}'>
+  <!-- Dynamic PWA Manifest Holder -->
+  <link id="manifest-placeholder" rel="manifest">
+  <link rel="apple-touch-icon" href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgYDIEqcDEQOb7vPbahxCYf7xbY8dt4Mg8RM3JZM7gWnEnghUm7HR6JPOy2wJSkl_pxcAsnPCbuqtDiPCxg-Kx9N0J5n3yckarG-1BtFKjT4O65lGwZ3a2wjQIUssdT9XpCrc0DNpYF3hpp2snQDdfFOUBK3olE7M7QNNAy8DHcXMKj3t8D6veY9Mj576oA/s320/WhatsApp%20Image%202025-06-11%20at%204.34.21%20PM.jpeg">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,31 +29,49 @@
     window.OneSignalDeferred = window.OneSignalDeferred || [];
     OneSignalDeferred.push(async function(OneSignal) {
       await OneSignal.init({
-        appId: "c4e3f190-e5b2-4f2b-9f50-fb383ebccab8",
+        appId: "c4e3f190-e5b2-4f2b-9f6d-0b383ebccab8",
         safari_web_id: "web.onesignal.auto.xxxxx",
-        notifyButton: { enable: true }
+        notifyButton: {
+          enable: true,
+        },
       });
     });
   </script>
 
   <style>
-    body, input, select, button, h1, h2, h3, h4, p, span, div { font-family: 'Tajawal', sans-serif; }
-    .glow-ring { box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); }
-    .glass-card { background: rgba(24, 24, 27, 0.85); backdrop-filter: blur(12px); }
+    body, input, select, button, h1, h2, h3, h4, p, span, div {
+      font-family: 'Tajawal', sans-serif;
+    }
+    .glow-ring {
+      box-shadow: 0 0 18px rgba(245, 158, 11, 0.45);
+    }
+    .glass-card {
+      background: rgba(24, 24, 27, 0.88);
+      backdrop-filter: blur(14px);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #3f3f46;
+      border-radius: 10px;
+    }
   </style>
 </head>
-<body class="bg-stone-950 text-stone-100 min-h-screen pb-16 max-w-md mx-auto border-x border-stone-800 shadow-2xl relative select-none">
+<body class="bg-stone-950 text-stone-100 min-h-screen pb-20 max-w-md mx-auto border-x border-stone-800 shadow-2xl relative selection:bg-amber-500 selection:text-stone-950">
 
-  <!-- صوت التنبيه المستمر داخل التطبيق -->
+  <!-- صوت التنبيه المستمر لحين قبول الأوردر -->
   <audio id="driver-alert-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto" loop></audio>
 
-  <!-- الهيدر -->
+  <!-- الهيدر الاحترافي -->
   <header class="bg-gradient-to-r from-stone-900 via-stone-950 to-stone-900 p-4 sticky top-0 z-30 border-b border-stone-800/80 shadow-xl">
     <div class="flex justify-between items-center">
       <div class="flex items-center gap-3">
         <div class="relative">
-          <div class="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-xl shadow-lg">🛵</div>
-          <span id="wake-lock-status-dot" class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-stone-950 rounded-full" title="نشط"></span>
+          <div class="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-xl shadow-lg">
+            🛵
+          </div>
+          <span id="wake-lock-status-dot" class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-stone-950 rounded-full" title="العمل في الخلفية مفعل"></span>
         </div>
         <div>
           <h1 class="text-base font-black text-amber-400 leading-tight">تطبيق الكابتن ⚡</h1>
@@ -63,38 +79,74 @@
         </div>
       </div>
 
-      <button onclick="toggleSoundSetting()" id="sound-toggle-btn" class="bg-amber-500/20 border border-amber-500/40 text-amber-400 p-2.5 rounded-xl transition">
-        <i class="fa-solid fa-bell text-sm"></i>
-      </button>
+      <div class="flex items-center gap-2">
+        <button onclick="toggleSoundSetting()" id="sound-toggle-btn" class="bg-amber-500/20 border border-amber-500/40 text-amber-400 p-2.5 rounded-xl transition hover:bg-amber-500/30">
+          <i class="fa-solid fa-bell text-sm"></i>
+        </button>
+        <button id="logout-driver-btn" onclick="logoutDriver()" class="hidden bg-red-500/10 border border-red-500/30 text-red-400 p-2.5 rounded-xl transition hover:bg-red-500/20" title="تسجيل الخروج والتبديل">
+          <i class="fa-solid fa-right-from-bracket text-sm"></i>
+        </button>
+      </div>
     </div>
   </header>
 
+  <!-- زر تثبيت التطبيق PWA -->
+  <div id="pwa-install-btn" class="hidden m-4 mb-0 bg-gradient-to-r from-amber-500 to-amber-600 p-3 rounded-2xl text-stone-950 font-black text-xs flex justify-between items-center shadow-lg border border-amber-400/50">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-mobile-screen-button text-lg"></i>
+      <span>ثبّت تطبيق الكابتن على هاتفك الآن</span>
+    </div>
+    <button onclick="installPWA()" class="bg-stone-950 text-amber-400 px-3 py-1.5 rounded-xl font-bold text-[11px] hover:bg-stone-900 transition">
+      تثبيت 📲
+    </button>
+  </div>
+
   <main class="p-4 space-y-4">
 
-    <!-- تسجيل الدخول -->
-    <div id="driver-setup-card" class="glass-card p-4 rounded-2xl border border-stone-800 space-y-3 shadow-xl">
-      <div class="flex items-center gap-2 text-xs font-bold text-amber-400">
-        <i class="fa-solid fa-user-gear"></i>
-        <span>تسجيل اسم الطيار:</span>
+    <!-- كارت إدخال الاسم وكلمة السر (يختفي تلقائياً فور التسجيل) -->
+    <div id="driver-setup-card" class="glass-card p-4.5 rounded-2xl border border-stone-800 space-y-3.5 shadow-xl">
+      <div class="flex items-center justify-between text-xs font-bold text-amber-400">
+        <span class="flex items-center gap-2">
+          <i class="fa-solid fa-user-lock text-sm"></i>
+          <span>تسجيل دخول الكابتن:</span>
+        </span>
+        <span class="text-[10px] text-stone-400 font-normal">محمي بكلمة سر</span>
       </div>
-      <div class="flex gap-2">
-        <input type="text" id="driver-name-input" placeholder="ادخل اسمك المسجل لدى الكاشير..." class="flex-1 bg-stone-900 border border-stone-700 rounded-xl px-3 py-2.5 text-xs text-amber-400 font-bold focus:outline-none focus:border-amber-500">
-        <button onclick="saveDriverName()" class="bg-amber-500 hover:bg-amber-600 text-stone-950 font-black text-xs px-5 py-2.5 rounded-xl transition shadow">حفظ</button>
+      <div class="space-y-2.5">
+        <div>
+          <label class="block text-[11px] text-stone-400 mb-1 font-bold">اسم الكابتن:</label>
+          <input type="text" id="driver-name-input" placeholder="ادخل اسمك المسجل لدى الكاشير..." class="w-full bg-stone-900 border border-stone-700 rounded-xl px-3.5 py-2.5 text-xs text-amber-400 font-bold focus:outline-none focus:border-amber-500">
+        </div>
+        <div>
+          <label class="block text-[11px] text-stone-400 mb-1 font-bold">كلمة السر (الباسورد الخاص بك):</label>
+          <input type="password" id="driver-pass-input" placeholder="ادخل كلمة السر لفتح حسابك..." class="w-full bg-stone-900 border border-stone-700 rounded-xl px-3.5 py-2.5 text-xs text-amber-400 font-bold focus:outline-none focus:border-amber-500">
+        </div>
+        <button onclick="saveDriverName()" class="w-full bg-amber-500 hover:bg-amber-600 text-stone-950 font-black text-xs py-3 rounded-xl transition shadow-lg active:scale-98 flex justify-center items-center gap-2">
+          <i class="fa-solid fa-key"></i> دخول الحساب / اعتماد البيانات
+        </button>
       </div>
     </div>
 
-    <!-- الإحصائيات -->
+    <!-- شريط الإحصائيات اليومية -->
     <div class="grid grid-cols-2 gap-3">
-      <div class="bg-stone-900/90 border border-stone-800/80 p-3 rounded-2xl flex items-center gap-3 shadow">
-        <div class="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center text-sm font-black"><i class="fa-solid fa-box"></i></div>
-        <div>
-          <span class="text-[10px] text-stone-400 font-bold block">أوردرات اليوم</span>
-          <span id="stat-driver-delivered-count" class="text-sm font-black text-white">0</span>
+      <!-- كارت أوردرات اليوم القابل للضغط -->
+      <div onclick="openTodayOrdersModal()" class="bg-stone-900/90 hover:bg-stone-900 border border-stone-800/80 hover:border-amber-500/40 p-3 rounded-2xl flex items-center justify-between shadow cursor-pointer transition active:scale-95 group">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center text-sm font-black group-hover:bg-blue-500/20">
+            <i class="fa-solid fa-box"></i>
+          </div>
+          <div>
+            <span class="text-[10px] text-stone-400 font-bold block">أوردرات اليوم</span>
+            <span id="stat-driver-delivered-count" class="text-sm font-black text-white">0</span>
+          </div>
         </div>
+        <i class="fa-solid fa-chevron-left text-xs text-stone-500 group-hover:text-amber-400 transition"></i>
       </div>
 
-      <div class="bg-stone-900/90 border border-stone-800/80 p-3 rounded-2xl flex items-center gap-3 shadow">
-        <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center text-sm font-black"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+      <div class="bg-stone-900/90 border border-stone-800/80 p-3 rounded-2xl flex items-center gap-2.5 shadow">
+        <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center text-sm font-black">
+          <i class="fa-solid fa-hand-holding-dollar"></i>
+        </div>
         <div>
           <span class="text-[10px] text-stone-400 font-bold block">عمولات التوصيل</span>
           <span id="stat-driver-delivery-total" class="text-sm font-black text-emerald-400">0 ج.م</span>
@@ -102,15 +154,81 @@
       </div>
     </div>
 
-    <!-- الطلبات -->
+    <!-- قائمة الطلبات الجارية -->
     <div class="flex justify-between items-center pt-2">
-      <h2 class="text-xs font-black text-stone-300 flex items-center gap-1.5"><i class="fa-solid fa-route text-amber-500"></i> الطلبات الحالية</h2>
+      <h2 class="text-xs font-black text-stone-300 flex items-center gap-1.5">
+        <i class="fa-solid fa-route text-amber-500"></i> الطلبات الحالية المُكلف بها
+      </h2>
       <span id="orders-count-badge" class="bg-stone-900 border border-stone-800 text-amber-400 text-[10px] px-2.5 py-0.5 rounded-full font-bold">0</span>
     </div>
 
     <div id="driver-orders-container" class="space-y-4"></div>
 
   </main>
+
+  <!-- نافذة عرض أوردرات اليوم المنفصلة (Modal) -->
+  <div id="today-orders-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="glass-card w-full max-w-sm rounded-3xl border border-stone-800 p-5 space-y-4 shadow-2xl flex flex-col max-h-[85vh]">
+      <div class="flex justify-between items-center border-b border-stone-800 pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm font-bold">
+            <i class="fa-solid fa-list-check"></i>
+          </div>
+          <h3 class="text-sm font-black text-amber-400">سجل أوردراتك اليوم</h3>
+        </div>
+        <button onclick="closeTodayOrdersModal()" class="w-8 h-8 rounded-xl bg-stone-900 text-stone-400 hover:text-white flex items-center justify-center border border-stone-800">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div id="today-orders-container" class="space-y-3 overflow-y-auto custom-scrollbar flex-1 pr-1"></div>
+
+      <button onclick="closeTodayOrdersModal()" class="w-full bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-300 font-bold py-2.5 rounded-xl text-xs">
+        إغلاق
+      </button>
+    </div>
+  </div>
+
+  <!-- نافذة تأكيد تسليم الأوردر الاحترافية (Custom Confirmation Modal) -->
+  <div id="confirm-delivery-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="glass-card w-full max-w-sm rounded-3xl border border-emerald-500/40 p-5 space-y-4 shadow-2xl animate-in fade-in zoom-in duration-200">
+      <div class="text-center space-y-2">
+        <div class="w-14 h-14 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 mx-auto flex items-center justify-center text-2xl shadow-lg">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <h3 class="text-base font-black text-white">تأكيد تسليم الأوردر</h3>
+        <p class="text-xs text-stone-400">يرجى التأكد من استلام المبلغ بالكامل قبل التأكيد</p>
+      </div>
+
+      <div class="bg-stone-900/90 border border-stone-800 rounded-2xl p-3.5 space-y-2 text-xs">
+        <div class="flex justify-between text-stone-300">
+          <span>رقم الأوردر:</span>
+          <span id="confirm-modal-order-id" class="font-black text-amber-400">#---</span>
+        </div>
+        <div class="flex justify-between text-stone-300">
+          <span>العميل:</span>
+          <span id="confirm-modal-cust-name" class="font-bold text-white">---</span>
+        </div>
+        <div class="flex justify-between border-t border-stone-800 pt-2 text-stone-300 font-bold">
+          <span>المبلغ المطلوب تحصيله:</span>
+          <span id="confirm-modal-total" class="font-black text-emerald-400 text-sm">0 ج.م</span>
+        </div>
+        <div class="flex justify-between text-stone-400 text-[11px]">
+          <span>يتضمن عمولة التوصيل:</span>
+          <span id="confirm-modal-delivery-fee" class="font-bold text-stone-300">0 ج.م</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2.5">
+        <button onclick="closeConfirmModal()" class="bg-stone-900 hover:bg-stone-800 text-stone-300 font-bold py-3 rounded-xl text-xs border border-stone-800">
+          إلغاء
+        </button>
+        <button onclick="confirmOrderDeliveredAction()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3 rounded-xl text-xs shadow-lg active:scale-95 transition">
+          تأكيد التسليم ✅
+        </button>
+      </div>
+    </div>
+  </div>
 
   <script>
     const firebaseConfig = {
@@ -127,86 +245,237 @@
     const db = firebase.database();
 
     let currentDriverName = localStorage.getItem('rokn_driver_name') || '';
+    let currentDriverPass = localStorage.getItem('rokn_driver_pass') || '';
     let driverAudioAllowed = true;
     let wakeLock = null;
+    let todayOrdersList = [];
+    let pendingDeliveredOrderKey = null;
 
+    // --- Dynamic PWA Generation ---
+    (function createDynamicPWA() {
+      const manifest = {
+        name: "تطبيق الكابتن - الركن الشامي",
+        short_name: "الكابتن",
+        start_url: "./",
+        display: "standalone",
+        background_color: "#09090b",
+        theme_color: "#09090b",
+        icons: [
+          {
+            src: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgYDIEqcDEQOb7vPbahxCYf7xbY8dt4Mg8RM3JZM7gWnEnghUm7HR6JPOy2wJSkl_pxcAsnPCbuqtDiPCxg-Kx9N0J5n3yckarG-1BtFKjT4O65lGwZ3a2wjQIUssdT9XpCrc0DNpYF3hpp2snQDdfFOUBK3olE7M7QNNAy8DHcXMKj3t8D6veY9Mj576oA/s320/WhatsApp%20Image%202025-06-11%20at%204.34.21%20PM.jpeg",
+            sizes: "192x192",
+            type: "image/jpeg"
+          },
+          {
+            src: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgYDIEqcDEQOb7vPbahxCYf7xbY8dt4Mg8RM3JZM7gWnEnghUm7HR6JPOy2wJSkl_pxcAsnPCbuqtDiPCxg-Kx9N0J5n3yckarG-1BtFKjT4O65lGwZ3a2wjQIUssdT9XpCrc0DNpYF3hpp2snQDdfFOUBK3olE7M7QNNAy8DHcXMKj3t8D6veY9Mj576oA/s320/WhatsApp%20Image%202025-06-11%20at%204.34.21%20PM.jpeg",
+            sizes: "512x512",
+            type: "image/jpeg"
+          }
+        ]
+      };
+      const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+      document.getElementById('manifest-placeholder').setAttribute('href', URL.createObjectURL(blob));
+    })();
+
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const btn = document.getElementById('pwa-install-btn');
+      if (btn) btn.classList.remove('hidden');
+    });
+
+    function installPWA() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          deferredPrompt = null;
+          document.getElementById('pwa-install-btn').classList.add('hidden');
+        });
+      }
+    }
+
+    // 1. تفعيل Wake Lock
     async function requestWakeLock() {
       try {
         if ('wakeLock' in navigator) {
           wakeLock = await navigator.wakeLock.request('screen');
+          document.getElementById('wake-lock-status-dot').className = "absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-stone-950 rounded-full";
         }
-      } catch (err) {}
+      } catch (err) {
+        console.log('Wake Lock Error:', err);
+      }
     }
 
-    // تسجيل Service Worker مخصص لـ PWA والإشعارات
+    document.addEventListener('visibilitychange', async () => {
+      if (wakeLock !== null && document.visibilityState === 'visible') {
+        await requestWakeLock();
+      }
+    });
+
+    // 2. تسجيل Service Worker
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').catch(() => {
-        const swCode = `
-          self.addEventListener('install', (e) => self.skipWaiting());
-          self.addEventListener('activate', (e) => self.clients.claim());
-          self.addEventListener('notificationclick', (e) => {
-            e.notification.close();
-            e.waitUntil(clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
-              for (const client of clientList) {
-                if ('focus' in client) return client.focus();
-              }
-              if (clients.openWindow) return clients.openWindow('/');
-            }));
-          });
-        `;
-        const blob = new Blob([swCode], { type: 'application/javascript' });
-        navigator.serviceWorker.register(URL.createObjectURL(blob));
-      });
+      const swCode = `
+        self.addEventListener('install', (e) => self.skipWaiting());
+        self.addEventListener('activate', (e) => self.clients.claim());
+        self.addEventListener('notificationclick', (e) => {
+          e.notification.close();
+          e.waitUntil(clients.matchAll({ type: 'window' }).then(clientList => {
+            for (const client of clientList) {
+              if (client.url && 'focus' in client) return client.focus();
+            }
+            if (clients.openWindow) return clients.openWindow('/');
+          }));
+        });
+      `;
+      const blob = new Blob([swCode], { type: 'application/javascript' });
+      const swUrl = URL.createObjectURL(blob);
+      navigator.serviceWorker.register(swUrl).catch(err => console.log('SW registration error:', err));
     }
 
-    document.addEventListener('click', function() {
+    // 3. تهيئة الصوت عند أول تفاعل
+    document.addEventListener('click', function unlockAudioAndNotifications() {
       if ("Notification" in window && Notification.permission === "default") {
         Notification.requestPermission();
       }
-      const audio = document.getElementById('driver-alert-sound');
-      if (audio) { audio.play().then(() => { audio.pause(); audio.currentTime = 0; }).catch(() => {}); }
+      
+      const alertAudio = document.getElementById('driver-alert-sound');
+      if (alertAudio) {
+        alertAudio.play().then(() => {
+          alertAudio.pause();
+          alertAudio.currentTime = 0;
+        }).catch(e => console.log('Audio unlock silent'));
+      }
+
       requestWakeLock();
     }, { once: true });
 
     window.addEventListener('DOMContentLoaded', () => {
-      if (currentDriverName) {
-        document.getElementById('driver-name-input').value = currentDriverName;
-        document.getElementById('header-driver-display').innerText = "الكابتن: " + currentDriverName;
+      updateDriverUI();
+      if (currentDriverName && currentDriverPass) {
         registerOneSignalDriverTag(currentDriverName);
       }
       initDriverOrdersListener();
     });
 
+    // إخفاء وإظهار واجهة التسجيل وحفظ حالة الدخول
+    function updateDriverUI() {
+      const setupCard = document.getElementById('driver-setup-card');
+      if (currentDriverName && currentDriverPass) {
+        document.getElementById('driver-name-input').value = currentDriverName;
+        document.getElementById('driver-pass-input').value = currentDriverPass || '';
+        document.getElementById('header-driver-display').innerText = "الكابتن: " + currentDriverName;
+        document.getElementById('logout-driver-btn').classList.remove('hidden');
+        if (setupCard) setupCard.classList.add('hidden'); // إخفاء كارت التسجيل بعد الدخول
+      } else {
+        document.getElementById('header-driver-display').innerText = "مطعم الركن الشامي";
+        document.getElementById('logout-driver-btn').classList.add('hidden');
+        if (setupCard) setupCard.classList.remove('hidden'); // إظهار كارت التسجيل إذا لم يسجل
+      }
+    }
+
     function registerOneSignalDriverTag(driverName) {
-      const cleanName = driverName.trim().toLowerCase();
       if (window.OneSignalDeferred) {
-        window.OneSignalDeferred.push(async function(OneSignal) {
-          try { await OneSignal.User.addTag("driver_name", cleanName); } catch (e) {}
+        OneSignalDeferred.push(function(OneSignal) {
+          OneSignal.User.addTag("driver_name", driverName.trim().toLowerCase());
         });
       }
     }
 
     function toggleSoundSetting() {
+      const audio = document.getElementById('driver-alert-sound');
       driverAudioAllowed = !driverAudioAllowed;
       const btn = document.getElementById('sound-toggle-btn');
-      const audio = document.getElementById('driver-alert-sound');
       if (driverAudioAllowed) {
-        btn.className = "bg-amber-500/20 border border-amber-500/40 text-amber-400 p-2.5 rounded-xl transition";
+        btn.className = "bg-amber-500/20 border border-amber-500/40 text-amber-400 p-2.5 rounded-xl transition hover:bg-amber-500/30";
+        alert("تم تفعيل إشعارات الصوت والاهتزاز 🔔");
       } else {
         btn.className = "bg-stone-900 border border-stone-800 text-stone-500 p-2.5 rounded-xl transition";
-        if (audio) { audio.pause(); audio.currentTime = 0; }
+        if (audio) {
+          audio.pause();
+          audio.currentTime = 0;
+        }
+        alert("تم كتم التنبيهات الصوتية 🔕");
       }
     }
 
+    function sendDriverSystemNotification(title, body) {
+      if ("Notification" in window && Notification.permission === "granted") {
+        const options = {
+          body: body,
+          icon: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgYDIEqcDEQOb7vPbahxCYf7xbY8dt4Mg8RM3JZM7gWnEnghUm7HR6JPOy2wJSkl_pxcAsnPCbuqtDiPCxg-Kx9N0J5n3yckarG-1BtFKjT4O65lGwZ3a2wjQIUssdT9XpCrc0DNpYF3hpp2snQDdfFOUBK3olE7M7QNNAy8DHcXMKj3t8D6veY9Mj576oA/s320/WhatsApp%20Image%202025-06-11%20at%204.34.21%20PM.jpeg',
+          vibrate: [400, 200, 400, 200, 400],
+          tag: 'new-order-alert',
+          renotify: true,
+          requireInteraction: true
+        };
+
+        if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+          navigator.serviceWorker.ready.then(reg => {
+            reg.showNotification(title, options);
+          });
+        } else {
+          new Notification(title, options);
+        }
+      }
+    }
+
+    // --- حفظ اسم الكابتن وكلمة السر وإخفاء الخانات بعد الاعتماد ---
     function saveDriverName() {
-      const val = document.getElementById('driver-name-input').value.trim();
-      if (!val) return alert("ادخل اسمك أولاً");
-      currentDriverName = val;
-      localStorage.setItem('rokn_driver_name', currentDriverName);
-      document.getElementById('header-driver-display').innerText = "الكابتن: " + currentDriverName;
-      registerOneSignalDriverTag(currentDriverName);
-      alert("تم تسجيل الكابتن بنجاح: " + currentDriverName);
-      initDriverOrdersListener();
+      const nameVal = document.getElementById('driver-name-input').value.trim();
+      const passVal = document.getElementById('driver-pass-input').value.trim();
+
+      if (!nameVal || !passVal) {
+        alert("يرجى إدخال اسمك وكلمة السر المخصصة لحسابك 🔑");
+        return;
+      }
+
+      const cleanDriverKey = nameVal.toLowerCase().replace(/[\.\#\$\[\]]/g, "_");
+      const driverRef = db.ref('drivers/' + cleanDriverKey);
+
+      driverRef.once('value').then(snapshot => {
+        const data = snapshot.val();
+        if (data && data.password) {
+          if (data.password !== passVal) {
+            alert("❌ كلمة السر غير صحيحة! يرجى التأكد من الباسورد الخاطئ لمنع تداخل الحسابات.");
+            return;
+          }
+        } else {
+          driverRef.set({
+            name: nameVal,
+            password: passVal,
+            createdAt: new Date().toISOString()
+          });
+        }
+
+        currentDriverName = nameVal;
+        currentDriverPass = passVal;
+        localStorage.setItem('rokn_driver_name', currentDriverName);
+        localStorage.setItem('rokn_driver_pass', currentDriverPass);
+        
+        updateDriverUI();
+        registerOneSignalDriverTag(currentDriverName);
+
+        if (window.AppInventor) {
+          window.AppInventor.setWebViewString("SET_DRIVER_TAG:" + currentDriverName);
+        }
+
+        alert("تم اعتماد الدخول بنجاح للكابتن: " + currentDriverName + " 🔑");
+        initDriverOrdersListener();
+      });
+    }
+
+    function logoutDriver() {
+      if (confirm("هل تريد تسجيل الخروج والتبديل لكابتن آخر؟")) {
+        localStorage.removeItem('rokn_driver_name');
+        localStorage.removeItem('rokn_driver_pass');
+        currentDriverName = '';
+        currentDriverPass = '';
+        document.getElementById('driver-name-input').value = '';
+        document.getElementById('driver-pass-input').value = '';
+        updateDriverUI();
+        initDriverOrdersListener();
+      }
     }
 
     function initDriverOrdersListener() {
@@ -217,13 +486,19 @@
         const todayStr = new Date().toISOString().split('T')[0];
 
         if (!currentDriverName) {
-          container.innerHTML = `<div class="glass-card p-6 rounded-2xl text-center border border-stone-800 text-stone-400 text-xs font-bold">يرجى تسجيل اسمك أولاً</div>`;
+          container.innerHTML = `
+            <div class="glass-card p-6 rounded-2xl text-center border border-stone-800 text-stone-400 text-xs font-bold space-y-2">
+              <i class="fa-solid fa-user-lock text-3xl text-amber-500/60 block"></i>
+              <p>يرجى تسجيل الدخول باسمك وكلمة السر لعرض أوردراتك.</p>
+            </div>
+          `;
           if (alertAudio) { alertAudio.pause(); alertAudio.currentTime = 0; }
           return;
         }
 
         let deliveredTodayCount = 0;
         let deliveryEarningsToday = 0;
+        todayOrdersList = [];
 
         Object.values(allOrders).forEach(o => {
           const isAssigned = (o.driverName && o.driverName.toLowerCase().trim() === currentDriverName.toLowerCase().trim());
@@ -233,6 +508,7 @@
           if (isAssigned && isDelivered && (orderDate === todayStr || !orderDate)) {
             deliveredTodayCount++;
             deliveryEarningsToday += Number(o.deliveryFee || 0);
+            todayOrdersList.push(o);
           }
         });
 
@@ -247,19 +523,33 @@
         });
 
         document.getElementById('orders-count-badge').innerText = myOrders.length;
+
         const unacceptedOrder = myOrders.find(([key, ord]) => !ord.driverAccepted);
 
         if (unacceptedOrder && driverAudioAllowed) {
-          if (alertAudio.paused) { alertAudio.play().catch(() => {}); }
+          if (alertAudio.paused) {
+            alertAudio.play().catch(e => console.log('Audio play blocked:', e));
+            sendDriverSystemNotification(
+              "أوردر توصيل جديد 🛵", 
+              `لديك أوردر جديد برقم #${unacceptedOrder[1].orderId || unacceptedOrder[0].slice(-5)} في انتظار القبول`
+            );
+          }
+
+          if (window.AppInventor) {
+            window.AppInventor.setWebViewString("NEW_ORDER_" + Date.now());
+          }
         } else {
           if (alertAudio) { alertAudio.pause(); alertAudio.currentTime = 0; }
         }
 
         if (myOrders.length === 0) {
           container.innerHTML = `
-            <div class="glass-card p-8 rounded-2xl text-center border border-stone-800 space-y-2">
-              <i class="fa-solid fa-motorcycle text-stone-600 text-2xl"></i>
+            <div class="glass-card p-10 rounded-2xl text-center border border-stone-800 space-y-3">
+              <div class="w-16 h-16 rounded-full bg-stone-900 mx-auto flex items-center justify-center text-stone-600 text-2xl border border-stone-800">
+                <i class="fa-solid fa-motorcycle"></i>
+              </div>
               <p class="text-stone-300 font-bold text-xs">لا توجد طلبات جارية موجهة إليك حالياً</p>
+              <p class="text-[11px] text-stone-500">سيتم تنبيهك بصوت ورنين فور توجيه طلب جديد من الكاشير.</p>
             </div>
           `;
           return;
@@ -270,31 +560,86 @@
           const custPhone = ord.customer ? ord.customer.phone : (ord.phone || '');
           const orderId = ord.orderId || ord.id || key.slice(-5);
           const isAccepted = ord.driverAccepted === true;
+          const addressEncoded = encodeURIComponent(ord.address || '');
+
+          const itemsList = (ord.items || []).map(item => `
+            <div class="flex justify-between items-center py-1 border-b border-stone-800/40 last:border-0 text-xs">
+              <span class="font-bold text-stone-200"><span class="text-amber-500 font-black">${item.qty || 1}x</span> ${item.name}</span>
+              <span class="text-stone-400 font-bold">${(Number(item.price) * (item.qty || 1))} ج.م</span>
+            </div>
+          `).join('');
 
           return `
-            <div class="glass-card rounded-2xl p-4 border ${!isAccepted ? 'border-amber-500 ring-2 ring-amber-500/20 glow-ring' : 'border-stone-800'} space-y-3 shadow-2xl">
-              <div class="flex justify-between items-center border-b border-stone-800 pb-2">
-                <span class="font-black text-amber-400 text-lg">#${orderId}</span>
-                <span class="px-3 py-1 rounded-xl text-xs ${isAccepted ? 'bg-purple-900/40 text-purple-300 font-bold' : 'bg-amber-500 text-stone-950 font-black animate-pulse'}">
+            <div class="glass-card rounded-2xl p-4 border ${!isAccepted ? 'border-amber-500 ring-2 ring-amber-500/20 glow-ring' : 'border-stone-800'} space-y-3.5 shadow-2xl relative overflow-hidden">
+              
+              <div class="flex justify-between items-center border-b border-stone-800/80 pb-2.5">
+                <div class="flex items-center gap-2">
+                  <span class="font-black text-amber-400 text-lg">#${orderId}</span>
+                  <span class="text-[10px] bg-stone-900 text-stone-400 px-2 py-0.5 rounded-lg border border-stone-800 font-bold">توصيل 🛵</span>
+                </div>
+                <span class="px-3 py-1 rounded-xl text-xs ${isAccepted ? 'bg-purple-900/40 text-purple-300 border border-purple-500/40 font-bold' : 'bg-amber-500 text-stone-950 font-black animate-pulse'}">
                   ${isAccepted ? 'جاري التوصيل 🚀' : 'في انتظار قبولك 🔔'}
                 </span>
               </div>
-              <div class="space-y-1.5 text-xs text-stone-300 bg-stone-900/90 p-3 rounded-xl">
-                <p class="font-bold text-white text-sm"><i class="fa-solid fa-user text-amber-500"></i> ${custName}</p>
-                <p><i class="fa-solid fa-phone text-amber-500"></i> <a href="tel:${custPhone}" class="text-amber-400 font-mono">${custPhone}</a></p>
-                <p><i class="fa-solid fa-location-dot text-amber-500"></i> ${ord.address || 'العنوان غير محدد'}</p>
+
+              <div class="space-y-2 text-xs text-stone-300 bg-stone-900/90 p-3 rounded-xl border border-stone-800/80">
+                <p class="font-bold text-white text-sm flex items-center gap-2">
+                  <i class="fa-solid fa-user-circle text-amber-500 text-base"></i> ${custName}
+                </p>
+                <p class="flex items-center gap-2 font-bold text-stone-300">
+                  <i class="fa-solid fa-phone text-amber-500"></i>
+                  <a href="tel:${custPhone}" class="text-amber-400 font-mono text-xs hover:underline">${custPhone}</a>
+                </p>
+                
+                <div class="pt-2 border-t border-stone-800/80">
+                  <p class="flex items-start gap-2 text-stone-300 text-xs leading-relaxed">
+                    <i class="fa-solid fa-location-dot text-amber-500 mt-0.5"></i> 
+                    <span>${ord.address || 'العنوان غير محدد'}</span>
+                  </p>
+                  <div class="flex gap-4 text-amber-400 font-black text-xs pt-1.5 mt-1 border-t border-stone-800/40">
+                    <span>🏢 الدور: ${ord.floor || 'غير محدد'}</span>
+                    <span>🚪 الشقة: ${ord.apt || 'غير محدد'}</span>
+                  </div>
+                </div>
               </div>
-              <div class="flex justify-between text-xs bg-stone-900/40 p-2.5 rounded-xl border border-stone-800">
-                <span class="text-stone-300 font-bold">المبلغ المطلوب تحصيله:</span>
-                <span class="font-black text-amber-400 text-sm">${ord.total || 0} ج.م</span>
+
+              <div class="bg-stone-900/40 p-3 rounded-xl border border-stone-800/60 space-y-1">
+                <p class="font-bold text-amber-400 text-[11px] mb-1 flex items-center gap-1.5">
+                  <i class="fa-solid fa-bag-shopping"></i> أصناف الأوردر:
+                </p>
+                ${itemsList || '<p class="text-stone-500 text-[11px]">لا يوجد تفاصيل أصناف</p>'}
               </div>
+
+              <div class="bg-gradient-to-r from-amber-500/10 to-stone-900 p-3 rounded-xl border border-amber-500/20 text-xs space-y-1">
+                <div class="flex justify-between text-stone-300 font-bold">
+                  <span>المبلغ المطلوب تحصيله من العميل:</span>
+                  <span class="font-black text-amber-400 text-base">${ord.total || 0} ج.م</span>
+                </div>
+                <div class="flex justify-between text-stone-400 text-[11px]">
+                  <span>تتضمن رسوم التوصيل:</span>
+                  <span class="font-bold text-stone-300">${ord.deliveryFee || 0} ج.م</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-3 gap-2">
+                <a href="tel:${custPhone}" class="bg-stone-900 hover:bg-stone-800 text-amber-400 border border-stone-800 font-bold py-2.5 rounded-xl text-xs flex justify-center items-center gap-1.5 shadow">
+                  <i class="fa-solid fa-phone"></i> اتصال
+                </a>
+                <a href="https://wa.me/2${custPhone}" target="_blank" class="bg-emerald-950 hover:bg-emerald-900 text-emerald-400 border border-emerald-800/60 font-bold py-2.5 rounded-xl text-xs flex justify-center items-center gap-1.5 shadow">
+                  <i class="fa-brands fa-whatsapp"></i> واتساب
+                </a>
+                <a href="https://www.google.com/maps/search/?api=1&query=${addressEncoded}" target="_blank" class="bg-blue-950 hover:bg-blue-900 text-blue-400 border border-blue-800/60 font-bold py-2.5 rounded-xl text-xs flex justify-center items-center gap-1.5 shadow">
+                  <i class="fa-solid fa-map-location-dot"></i> الخريطة
+                </a>
+              </div>
+
               ${!isAccepted ? `
-                <button onclick="acceptOrder('${key}')" class="w-full bg-amber-500 hover:bg-amber-600 text-stone-950 font-black py-3 rounded-xl text-xs shadow transition">
-                  قبول الأوردر وإيقاف الصوت 🚀
+                <button onclick="acceptOrder('${key}')" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-stone-950 font-black py-3.5 rounded-xl text-xs shadow-xl active:scale-95 transition flex justify-center items-center gap-2">
+                  <i class="fa-solid fa-circle-check text-sm"></i> قبول الأوردر والبدء في التوصيل وإيقاف الصوت 🚀
                 </button>
               ` : `
-                <button onclick="markDelivered('${key}')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3 rounded-xl text-xs shadow transition">
-                  تأكيد تسليم الأوردر ✅
+                <button onclick="markDelivered('${key}')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3 rounded-xl text-xs shadow-lg active:scale-95 transition flex justify-center items-center gap-2">
+                  <i class="fa-solid fa-circle-check text-sm"></i> تأكيد تسليم الأوردر واستلام المبلغ ✅
                 </button>
               `}
             </div>
@@ -303,8 +648,108 @@
       });
     }
 
-    function acceptOrder(key) { db.ref('orders/' + key).update({ driverAccepted: true, status: 'في الطريق' }); }
-    function markDelivered(key) { if (confirm("هل تم التسليم واستلام المبلغ؟")) db.ref('orders/' + key).update({ status: 'تم التسليم', driverAccepted: true }); }
+    function acceptOrder(key) {
+      db.ref('orders/' + key).update({
+        driverAccepted: true,
+        status: 'في الطريق'
+      });
+      if (window.AppInventor) {
+        window.AppInventor.setWebViewString("ORDER_ACCEPTED");
+      }
+    }
+
+    // --- العرض التفصيلي لأوردرات اليوم ---
+    function openTodayOrdersModal() {
+      const modal = document.getElementById('today-orders-modal');
+      const container = document.getElementById('today-orders-container');
+
+      if (!todayOrdersList || todayOrdersList.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center text-stone-400 text-xs font-bold space-y-2">
+            <i class="fa-solid fa-box-open text-3xl text-stone-600 block"></i>
+            <p>لا توجد أوردرات مكتملة لك هذا اليوم حتى الآن</p>
+          </div>
+        `;
+      } else {
+        container.innerHTML = todayOrdersList.map(ord => {
+          const custName = ord.customer ? ord.customer.name : (ord.name || 'عميل');
+          const orderId = ord.orderId || ord.id || '---';
+          const itemsList = (ord.items || []).map(i => `${i.qty || 1}x ${i.name}`).join(' ، ');
+
+          return `
+            <div class="bg-stone-900 border border-stone-800 rounded-xl p-3 space-y-2 text-xs">
+              <div class="flex justify-between items-center border-b border-stone-800 pb-2">
+                <span class="font-black text-amber-400">#${orderId}</span>
+                <span class="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-lg font-bold">تم التسليم ✅</span>
+              </div>
+              <div class="flex justify-between text-stone-300 font-bold">
+                <span>العميل: ${custName}</span>
+                <span class="text-amber-400">${ord.total || 0} ج.م</span>
+              </div>
+              <div class="text-[11px] text-stone-400 leading-relaxed">
+                <i class="fa-solid fa-location-dot text-amber-500"></i> ${ord.address || 'عنوان غير محدد'}
+              </div>
+              ${itemsList ? `<div class="text-[10px] text-stone-500 border-t border-stone-800/60 pt-1">الأصناف: ${itemsList}</div>` : ''}
+              <div class="flex justify-between text-[11px] text-emerald-400 font-bold border-t border-stone-800/40 pt-1">
+                <span>عمولة التوصيل:</span>
+                <span>+${ord.deliveryFee || 0} ج.م</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeTodayOrdersModal() {
+      const modal = document.getElementById('today-orders-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // --- نافذة التأكيد المخصصة لتسليم الأوردر ---
+    function markDelivered(key) {
+      pendingDeliveredOrderKey = key;
+      db.ref('orders/' + key).once('value').then(snapshot => {
+        const ord = snapshot.val();
+        if (!ord) return;
+
+        const custName = ord.customer ? ord.customer.name : (ord.name || 'عميل');
+        const orderId = ord.orderId || ord.id || key.slice(-5);
+        
+        document.getElementById('confirm-modal-order-id').innerText = '#' + orderId;
+        document.getElementById('confirm-modal-cust-name').innerText = custName;
+        document.getElementById('confirm-modal-total').innerText = (ord.total || 0) + ' ج.م';
+        document.getElementById('confirm-modal-delivery-fee').innerText = (ord.deliveryFee || 0) + ' ج.م';
+
+        const modal = document.getElementById('confirm-delivery-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      });
+    }
+
+    function closeConfirmModal() {
+      pendingDeliveredOrderKey = null;
+      const modal = document.getElementById('confirm-delivery-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function confirmOrderDeliveredAction() {
+      if (!pendingDeliveredOrderKey) return;
+      const key = pendingDeliveredOrderKey;
+      db.ref('orders/' + key).update({
+        status: 'تم التسليم',
+        driverAccepted: true
+      });
+
+      if (window.AppInventor) {
+        window.AppInventor.setWebViewString("ORDER_DELIVERED");
+      }
+      closeConfirmModal();
+    }
   </script>
 </body>
 </html>
